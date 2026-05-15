@@ -1,8 +1,8 @@
-🏗️ Linux VPC CLI
+ Linux VPC CLI
 
 Virtual Private Cloud Simulation using Linux Namespaces, Bridges, and veth pairs
 
-📖 Overview
+ Overview
 
 This project implements a lightweight Virtual Private Cloud (VPC) on Linux using only native networking tools (ip, ip netns, bridge, iptables).
 It mimics cloud-level network isolation, routing, and NAT functionality.
@@ -19,7 +19,7 @@ Defining firewall rules using JSON-based security policies
 
 Automating cleanup for repeatable testing
 
-⚙️ Requirements
+ Requirements
 Variable	Description
 VPC_NAME	Unique name for your virtual VPC
 CIDR_BLOCK	Base IP range (e.g., 10.0.0.0/16)
@@ -32,8 +32,8 @@ Linux (Ubuntu 20.04+ recommended)
 sudo privileges
 iproute2, iptables, and bridge-utils installed
 
-🚀 CLI Usage
-1️⃣ Create a VPC
+ CLI Usage
+1️ Create a VPC
 sudo ./vpcctl.sh create myvpc 10.0.0.0/16 10.0.1.0/24 10.0.2.0/24 eth0
 
 
@@ -44,7 +44,7 @@ veth pairs connecting namespaces and the bridge
 Routing and NAT rules for the public subnet
 Logs of all configuration steps
 
-2️⃣ Inspect the VPC
+2️ Inspect the VPC
 sudo ./vpcctl.sh inspect myvpc
 
 
@@ -55,7 +55,7 @@ Bridge and veth connectivity
 Routing tables for each namespace
 Active firewall rules
 
-3️⃣ Test Connectivity
+3️ Test Connectivity
 Run inside your public namespace:
 sudo ip netns exec ns-myvpc-public ping -c3 8.8.8.8
 
@@ -64,7 +64,7 @@ Run between namespaces:
 sudo ip netns exec ns-myvpc-private ping -c3 10.0.1.10
 If NAT is properly set, the public namespace should have internet access while the private one does not.
 
-4️⃣ Apply Firewall Policies
+4️ Apply Firewall Policies
 Edit a JSON policy file, for example:
 
 {
@@ -79,7 +79,7 @@ Edit a JSON policy file, for example:
 Then apply:
 sudo ./vpcctl.sh apply-firewall myvpc firewall.json
 
-5️⃣ Delete a VPC (Cleanup)
+5️ Delete a VPC (Cleanup)
 sudo ./vpcctl.sh delete myvpc
 
 
@@ -92,7 +92,7 @@ iptables NAT and filter rules
 Idempotent:
 Running delete twice will not cause errors or duplicate removals.
 
-🧪 Acceptance Test Commands (for Screenshots)
+ Acceptance Test Commands (for Screenshots)
 Below are the commands you can run to produce validation screenshots.
 
 Test	Command	Expected Output
@@ -106,7 +106,8 @@ Test	Command	Expected Output
 8. Apply firewall rule	sudo ./vpcctl.sh apply-firewall myvpc firewall.json	Rule logs displayed
 9. Delete all resources	sudo ./vpcctl.sh delete myvpc	Logs confirming cleanup
 10. Confirm cleanup	ip netns list && brctl show	No ns-myvpc-* or br-myvpc entries
-🪵 Sample Output Log (from CLI)
+
+ Sample Output Log (from CLI)
 [+] Creating bridge br-myvpc ...
 [+] Creating namespaces ns-myvpc-public, ns-myvpc-private ...
 [+] Linking veth-public and veth-private ...
@@ -114,7 +115,7 @@ Test	Command	Expected Output
 [+] Configuring routes and NAT ...
 [✔] VPC myvpc created successfully!
 
-🧹 Cleanup Guarantee
+ Cleanup Guarantee
 The CLI:
 Checks if resources already exist before creating them.
 Cleans up all related interfaces, namespaces, and rules on deletion.
@@ -124,35 +125,27 @@ You can safely re-run:
 sudo ./vpcctl.sh create myvpc ...
 sudo ./vpcctl.sh delete myvpc
 
-📸 Recommended Screenshots for Submission
-✅ Successful creation log
-🌐 Public namespace ping to 8.8.8.8 (success)
-🔒 Private namespace ping to 8.8.8.8 (failure)
+- Recommended Screenshots for Submission
+- Successful creation log
+- Public namespace ping to 8.8.8.8 (success)
+- Private namespace ping to 8.8.8.8 (failure)
 
-🔄 Bridge (brctl show) output
+ Bridge (brctl show) output
 
-🧱 Firewall test (port blocked)
+ Firewall test (port blocked)
 
-🧹 Cleanup log (delete successful)
+ Cleanup log (delete successful)
 
 
 Optionally 
 
-🏗️ Build Your Own Virtual Private Cloud (VPC) on Linux
-🚀 Overview
-This project recreates a full-featured VPC using Linux primitives like network namespaces, bridges, veth pairs, routing tables, NAT, and iptables — no cloud provider needed.
+ Build Your Own Virtual Private Cloud (VPC) on Linux
 
-🎯 Objectives
-Create isolated VPCs with public/private subnets
-Enable NAT for public subnets
-Enforce firewall rules via JSON policies
-Support optional VPC peering
-Automate everything with a Bash CLI (vpcctl)
 
-🧰 Architecture Diagram
+ Architecture Diagram
 Include the image we generated earlier showing bridges, namespaces, and peering.
 
-🧪 CLI Usage
+ CLI Usage
 bash
 # Create VPCs and subnets
 ./vpcctl create
@@ -164,7 +157,7 @@ bash
 ./vpcctl apply-policy policy.json
 # Teardown everything
 ./vpcctl teardown
-🔐 Firewall Policy Example
+- Firewall Policy Example
 json
 {
   "subnet": "10.20.0.0/24",
