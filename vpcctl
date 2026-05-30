@@ -35,7 +35,7 @@ SUBNET=$(jq -r '.subnet' "$POLICY_FILE")
     fi
   done
 
-  echo "✅ Policy applied to $NS_NAME"
+  echo "Policy applied to $NS_NAME"
 }
 
 
@@ -130,7 +130,7 @@ create_vpc() {
   iptables -t nat -A POSTROUTING -s 192.168.50.1/32 -o $INTERNET_IF -j MASQUERADE
   iptables -t nat -A POSTROUTING -s 10.20.0.1/32 -o $INTERNET_IF -j MASQUERADE
 
-  log "✅ VPCs created successfully."
+  log "VPCs created successfully."
 }
 
 peer_vpcs() {
@@ -144,14 +144,14 @@ peer_vpcs() {
   ip route add $VPC2_CIDR dev v-net1
   ip route add $VPC1_CIDR dev v-net2
 
-  log "✅ Peering established."
+  log "Peering established."
 }
 
 deploy_app() {
   log "Deploying web servers..."
   ip netns exec ns-public python3 -m http.server 8080 &
   ip netns exec ns2-public python3 -m http.server 8080 &
-  log "✅ Web servers running on ports 8080 in public subnets."
+  log "Web servers running on ports 8080 in public subnets."
 }
 
 teardown() {
@@ -166,7 +166,7 @@ teardown() {
   ip link del veth-peer1 2>/dev/null || true
   ip link del veth-peer2 2>/dev/null || true
 
-  log "✅ Teardown complete."
+  log "Teardown complete."
 }
 
 case "$1" in
